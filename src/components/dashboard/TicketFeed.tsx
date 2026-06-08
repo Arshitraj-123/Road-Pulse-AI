@@ -30,16 +30,14 @@ export function TicketFeed() {
   useEffect(() => {
     const t = setInterval(() => {
       const id = `RP-${12400 + Math.floor(Math.random() * 999)}`;
-      setTickets((prev) => [
-        {
-          id,
-          type: newTypes[Math.floor(Math.random() * newTypes.length)],
-          location: newLocs[Math.floor(Math.random() * newLocs.length)],
-          status: "new",
-          minsAgo: 0,
-        },
-        ...prev,
-      ].slice(0, 20));
+      const next: Ticket = {
+        id,
+        type: newTypes[Math.floor(Math.random() * newTypes.length)],
+        location: newLocs[Math.floor(Math.random() * newLocs.length)],
+        status: "new",
+        minsAgo: 0,
+      };
+      setTickets((prev) => [next, ...prev].slice(0, 20));
     }, 8000);
     return () => clearInterval(t);
   }, []);

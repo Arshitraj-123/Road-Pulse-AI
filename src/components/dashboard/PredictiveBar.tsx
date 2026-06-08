@@ -54,13 +54,14 @@ export function PredictiveBar() {
               color: "white",
               fontSize: 12,
             }}
-            formatter={(value: number, _name, item) => {
-              const d = item.payload as (typeof data)[number];
+            formatter={((value: unknown, _name: unknown, item: unknown) => {
+              const it = item as { payload: (typeof data)[number] };
+              const d = it.payload;
               return [
                 `${d.type} • ${value} days • ₹${d.cost.toLocaleString("en-IN")}`,
                 d.name,
               ];
-            }}
+            }) as never}
           />
           <Bar dataKey="days" radius={[0, 4, 4, 0]} animationDuration={1200}>
             {data.map((d, i) => (
