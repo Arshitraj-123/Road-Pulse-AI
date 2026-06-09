@@ -13,11 +13,12 @@ import {
 import { motion } from "framer-motion";
 import { useAuthStore } from "@/store/useAuthStore";
 
-const items = [
+type NavItem = { to: string; icon: typeof LayoutDashboard; label: string; badge?: number };
+const items: NavItem[] = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Overview" },
-  { to: "/dashboard", icon: Map, label: "Live Map" },
+  { to: "/detection", icon: Map, label: "AI Detection" },
+  { to: "/contractors", icon: Users, label: "Contractors" },
   { to: "/dashboard", icon: FileText, label: "Damage Reports" },
-  { to: "/dashboard", icon: Users, label: "Contractors" },
   { to: "/dashboard", icon: DollarSign, label: "Budget" },
   { to: "/dashboard", icon: Bell, label: "Alerts", badge: 7 },
 ];
@@ -43,13 +44,13 @@ export function MunicipalSidebar() {
       </div>
 
       <nav className="mt-4 flex-1 space-y-0.5 px-2">
-        {items.map((item, i) => {
-          const active = i === 0 && pathname === "/dashboard";
+        {items.map((item) => {
+          const active = pathname === item.to;
           const Icon = item.icon;
           return (
             <Link
               key={item.label}
-              to={item.to}
+              to={item.to as "/dashboard"}
               className={`group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
                 active
                   ? "bg-teal-mid/15 text-white"
