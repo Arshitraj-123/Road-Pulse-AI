@@ -15,12 +15,12 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 const items = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Overview" },
-  { to: "/dashboard", icon: Map, label: "Live Map" },
+  { to: "/detection", icon: Map, label: "AI Detection" },
+  { to: "/contractors", icon: Users, label: "Contractors" },
   { to: "/dashboard", icon: FileText, label: "Damage Reports" },
-  { to: "/dashboard", icon: Users, label: "Contractors" },
   { to: "/dashboard", icon: DollarSign, label: "Budget" },
   { to: "/dashboard", icon: Bell, label: "Alerts", badge: 7 },
-];
+] as const;
 
 export function MunicipalSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -43,8 +43,8 @@ export function MunicipalSidebar() {
       </div>
 
       <nav className="mt-4 flex-1 space-y-0.5 px-2">
-        {items.map((item, i) => {
-          const active = i === 0 && pathname === "/dashboard";
+        {items.map((item) => {
+          const active = pathname === item.to;
           const Icon = item.icon;
           return (
             <Link
