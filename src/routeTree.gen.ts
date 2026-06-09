@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MunicipalRouteImport } from './routes/_municipal'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MunicipalDetectionRouteImport } from './routes/_municipal.detection'
 import { Route as MunicipalDashboardRouteImport } from './routes/_municipal.dashboard'
+import { Route as MunicipalContractorsRouteImport } from './routes/_municipal.contractors'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -28,35 +30,58 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MunicipalDetectionRoute = MunicipalDetectionRouteImport.update({
+  id: '/detection',
+  path: '/detection',
+  getParentRoute: () => MunicipalRoute,
+} as any)
 const MunicipalDashboardRoute = MunicipalDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => MunicipalRoute,
+} as any)
+const MunicipalContractorsRoute = MunicipalContractorsRouteImport.update({
+  id: '/contractors',
+  path: '/contractors',
   getParentRoute: () => MunicipalRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
+  '/detection': typeof MunicipalDetectionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
+  '/detection': typeof MunicipalDetectionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_municipal': typeof MunicipalRouteWithChildren
   '/login': typeof LoginRoute
+  '/_municipal/contractors': typeof MunicipalContractorsRoute
   '/_municipal/dashboard': typeof MunicipalDashboardRoute
+  '/_municipal/detection': typeof MunicipalDetectionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard'
+  fullPaths: '/' | '/login' | '/contractors' | '/dashboard' | '/detection'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard'
-  id: '__root__' | '/' | '/_municipal' | '/login' | '/_municipal/dashboard'
+  to: '/' | '/login' | '/contractors' | '/dashboard' | '/detection'
+  id:
+    | '__root__'
+    | '/'
+    | '/_municipal'
+    | '/login'
+    | '/_municipal/contractors'
+    | '/_municipal/dashboard'
+    | '/_municipal/detection'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_municipal/detection': {
+      id: '/_municipal/detection'
+      path: '/detection'
+      fullPath: '/detection'
+      preLoaderRoute: typeof MunicipalDetectionRouteImport
+      parentRoute: typeof MunicipalRoute
+    }
     '/_municipal/dashboard': {
       id: '/_municipal/dashboard'
       path: '/dashboard'
@@ -95,15 +127,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MunicipalDashboardRouteImport
       parentRoute: typeof MunicipalRoute
     }
+    '/_municipal/contractors': {
+      id: '/_municipal/contractors'
+      path: '/contractors'
+      fullPath: '/contractors'
+      preLoaderRoute: typeof MunicipalContractorsRouteImport
+      parentRoute: typeof MunicipalRoute
+    }
   }
 }
 
 interface MunicipalRouteChildren {
+  MunicipalContractorsRoute: typeof MunicipalContractorsRoute
   MunicipalDashboardRoute: typeof MunicipalDashboardRoute
+  MunicipalDetectionRoute: typeof MunicipalDetectionRoute
 }
 
 const MunicipalRouteChildren: MunicipalRouteChildren = {
+  MunicipalContractorsRoute: MunicipalContractorsRoute,
   MunicipalDashboardRoute: MunicipalDashboardRoute,
+  MunicipalDetectionRoute: MunicipalDetectionRoute,
 }
 
 const MunicipalRouteWithChildren = MunicipalRoute._addFileChildren(
