@@ -5,6 +5,7 @@ import { Moon, Sun } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home" },
+  { to: "/navigate", label: "Navigate" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/login", label: "Login" },
 ];
