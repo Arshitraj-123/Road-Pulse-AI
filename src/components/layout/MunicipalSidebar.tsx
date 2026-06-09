@@ -13,14 +13,15 @@ import {
 import { motion } from "framer-motion";
 import { useAuthStore } from "@/store/useAuthStore";
 
-const items = [
+type NavItem = { to: string; icon: typeof LayoutDashboard; label: string; badge?: number };
+const items: NavItem[] = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Overview" },
   { to: "/detection", icon: Map, label: "AI Detection" },
   { to: "/contractors", icon: Users, label: "Contractors" },
   { to: "/dashboard", icon: FileText, label: "Damage Reports" },
   { to: "/dashboard", icon: DollarSign, label: "Budget" },
   { to: "/dashboard", icon: Bell, label: "Alerts", badge: 7 },
-] as const;
+];
 
 export function MunicipalSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
