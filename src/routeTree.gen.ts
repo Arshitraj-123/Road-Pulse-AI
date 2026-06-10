@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as NavigateRouteImport } from './routes/navigate'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ContractorRouteImport } from './routes/contractor'
 import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as MunicipalRouteImport } from './routes/_municipal'
 import { Route as IndexRouteImport } from './routes/index'
@@ -26,6 +27,11 @@ const NavigateRoute = NavigateRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractorRoute = ContractorRouteImport.update({
+  id: '/contractor',
+  path: '/contractor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CitizenRoute = CitizenRouteImport.update({
@@ -61,6 +67,7 @@ const MunicipalContractorsRoute = MunicipalContractorsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
+  '/contractor': typeof ContractorRoute
   '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
   '/contractors': typeof MunicipalContractorsRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
+  '/contractor': typeof ContractorRoute
   '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
   '/contractors': typeof MunicipalContractorsRoute
@@ -81,6 +89,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_municipal': typeof MunicipalRouteWithChildren
   '/citizen': typeof CitizenRoute
+  '/contractor': typeof ContractorRoute
   '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
   '/_municipal/contractors': typeof MunicipalContractorsRoute
@@ -92,6 +101,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/citizen'
+    | '/contractor'
     | '/login'
     | '/navigate'
     | '/contractors'
@@ -101,6 +111,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/citizen'
+    | '/contractor'
     | '/login'
     | '/navigate'
     | '/contractors'
@@ -111,6 +122,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_municipal'
     | '/citizen'
+    | '/contractor'
     | '/login'
     | '/navigate'
     | '/_municipal/contractors'
@@ -122,6 +134,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MunicipalRoute: typeof MunicipalRouteWithChildren
   CitizenRoute: typeof CitizenRoute
+  ContractorRoute: typeof ContractorRoute
   LoginRoute: typeof LoginRoute
   NavigateRoute: typeof NavigateRoute
 }
@@ -140,6 +153,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contractor': {
+      id: '/contractor'
+      path: '/contractor'
+      fullPath: '/contractor'
+      preLoaderRoute: typeof ContractorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/citizen': {
@@ -207,6 +227,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MunicipalRoute: MunicipalRouteWithChildren,
   CitizenRoute: CitizenRoute,
+  ContractorRoute: ContractorRoute,
   LoginRoute: LoginRoute,
   NavigateRoute: NavigateRoute,
 }
