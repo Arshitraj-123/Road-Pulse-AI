@@ -136,7 +136,7 @@ function BudgetPage() {
                 <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="#94a3b8" />
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${v / 100000}L`} stroke="#94a3b8" />
                 <Tooltip
-                  formatter={(v: number) => `₹${(v / 100000).toFixed(1)}L`}
+                  formatter={(v: unknown) => `₹${(Number(v) / 100000).toFixed(1)}L`}
                   contentStyle={{ borderRadius: 8, fontSize: 12 }}
                 />
                 <Area type="monotone" dataKey="planned" stroke="#185fa5" strokeDasharray="4 4" fill="none" />
@@ -157,7 +157,7 @@ function BudgetPage() {
                 <XAxis type="number" tickFormatter={(v) => `${v / 1000}k`} tick={{ fontSize: 11 }} stroke="#94a3b8" />
                 <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={120} stroke="#94a3b8" />
                 <Tooltip
-                  formatter={(v: number) => `₹${v.toLocaleString("en-IN")}`}
+                  formatter={(v: unknown) => `₹${Number(v).toLocaleString("en-IN")}`}
                   contentStyle={{ borderRadius: 8, fontSize: 12 }}
                 />
                 <Bar dataKey="value" fill="#185fa5" radius={[0, 6, 6, 0]} />
