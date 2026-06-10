@@ -15,9 +15,12 @@ import { Route as ContractorRouteImport } from './routes/contractor'
 import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as MunicipalRouteImport } from './routes/_municipal'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MunicipalReportsRouteImport } from './routes/_municipal.reports'
 import { Route as MunicipalDetectionRouteImport } from './routes/_municipal.detection'
 import { Route as MunicipalDashboardRouteImport } from './routes/_municipal.dashboard'
 import { Route as MunicipalContractorsRouteImport } from './routes/_municipal.contractors'
+import { Route as MunicipalBudgetRouteImport } from './routes/_municipal.budget'
+import { Route as MunicipalAlertsRouteImport } from './routes/_municipal.alerts'
 
 const NavigateRoute = NavigateRouteImport.update({
   id: '/navigate',
@@ -48,6 +51,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MunicipalReportsRoute = MunicipalReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => MunicipalRoute,
+} as any)
 const MunicipalDetectionRoute = MunicipalDetectionRouteImport.update({
   id: '/detection',
   path: '/detection',
@@ -63,6 +71,16 @@ const MunicipalContractorsRoute = MunicipalContractorsRouteImport.update({
   path: '/contractors',
   getParentRoute: () => MunicipalRoute,
 } as any)
+const MunicipalBudgetRoute = MunicipalBudgetRouteImport.update({
+  id: '/budget',
+  path: '/budget',
+  getParentRoute: () => MunicipalRoute,
+} as any)
+const MunicipalAlertsRoute = MunicipalAlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
+  getParentRoute: () => MunicipalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -70,9 +88,12 @@ export interface FileRoutesByFullPath {
   '/contractor': typeof ContractorRoute
   '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
+  '/alerts': typeof MunicipalAlertsRoute
+  '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
+  '/reports': typeof MunicipalReportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -80,9 +101,12 @@ export interface FileRoutesByTo {
   '/contractor': typeof ContractorRoute
   '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
+  '/alerts': typeof MunicipalAlertsRoute
+  '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
+  '/reports': typeof MunicipalReportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -92,9 +116,12 @@ export interface FileRoutesById {
   '/contractor': typeof ContractorRoute
   '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
+  '/_municipal/alerts': typeof MunicipalAlertsRoute
+  '/_municipal/budget': typeof MunicipalBudgetRoute
   '/_municipal/contractors': typeof MunicipalContractorsRoute
   '/_municipal/dashboard': typeof MunicipalDashboardRoute
   '/_municipal/detection': typeof MunicipalDetectionRoute
+  '/_municipal/reports': typeof MunicipalReportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -104,9 +131,12 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/alerts'
+    | '/budget'
     | '/contractors'
     | '/dashboard'
     | '/detection'
+    | '/reports'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -114,9 +144,12 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/alerts'
+    | '/budget'
     | '/contractors'
     | '/dashboard'
     | '/detection'
+    | '/reports'
   id:
     | '__root__'
     | '/'
@@ -125,9 +158,12 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/_municipal/alerts'
+    | '/_municipal/budget'
     | '/_municipal/contractors'
     | '/_municipal/dashboard'
     | '/_municipal/detection'
+    | '/_municipal/reports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -183,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_municipal/reports': {
+      id: '/_municipal/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof MunicipalReportsRouteImport
+      parentRoute: typeof MunicipalRoute
+    }
     '/_municipal/detection': {
       id: '/_municipal/detection'
       path: '/detection'
@@ -204,19 +247,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MunicipalContractorsRouteImport
       parentRoute: typeof MunicipalRoute
     }
+    '/_municipal/budget': {
+      id: '/_municipal/budget'
+      path: '/budget'
+      fullPath: '/budget'
+      preLoaderRoute: typeof MunicipalBudgetRouteImport
+      parentRoute: typeof MunicipalRoute
+    }
+    '/_municipal/alerts': {
+      id: '/_municipal/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof MunicipalAlertsRouteImport
+      parentRoute: typeof MunicipalRoute
+    }
   }
 }
 
 interface MunicipalRouteChildren {
+  MunicipalAlertsRoute: typeof MunicipalAlertsRoute
+  MunicipalBudgetRoute: typeof MunicipalBudgetRoute
   MunicipalContractorsRoute: typeof MunicipalContractorsRoute
   MunicipalDashboardRoute: typeof MunicipalDashboardRoute
   MunicipalDetectionRoute: typeof MunicipalDetectionRoute
+  MunicipalReportsRoute: typeof MunicipalReportsRoute
 }
 
 const MunicipalRouteChildren: MunicipalRouteChildren = {
+  MunicipalAlertsRoute: MunicipalAlertsRoute,
+  MunicipalBudgetRoute: MunicipalBudgetRoute,
   MunicipalContractorsRoute: MunicipalContractorsRoute,
   MunicipalDashboardRoute: MunicipalDashboardRoute,
   MunicipalDetectionRoute: MunicipalDetectionRoute,
+  MunicipalReportsRoute: MunicipalReportsRoute,
 }
 
 const MunicipalRouteWithChildren = MunicipalRoute._addFileChildren(
