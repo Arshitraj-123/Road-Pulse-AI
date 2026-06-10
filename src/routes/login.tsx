@@ -19,7 +19,7 @@ const roles: {
   icon: React.ElementType;
   title: string;
   desc: string;
-  to: "/dashboard" | "/" | "/citizen";
+  to: "/dashboard" | "/contractor" | "/citizen";
   accent: string;
 }[] = [
   {
@@ -43,7 +43,7 @@ const roles: {
     icon: HardHat,
     title: "Contractor",
     desc: "View assigned tickets, update repair status.",
-    to: "/",
+    to: "/contractor",
     accent: "from-amber-light to-amber/10",
   },
 ];
