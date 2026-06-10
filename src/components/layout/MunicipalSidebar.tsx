@@ -18,9 +18,9 @@ const items: NavItem[] = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Overview" },
   { to: "/detection", icon: Map, label: "AI Detection" },
   { to: "/contractors", icon: Users, label: "Contractors" },
-  { to: "/dashboard", icon: FileText, label: "Damage Reports" },
-  { to: "/dashboard", icon: DollarSign, label: "Budget" },
-  { to: "/dashboard", icon: Bell, label: "Alerts", badge: 7 },
+  { to: "/reports", icon: FileText, label: "Damage Reports" },
+  { to: "/budget", icon: DollarSign, label: "Budget" },
+  { to: "/alerts", icon: Bell, label: "Alerts", badge: 7 },
 ];
 
 export function MunicipalSidebar() {
