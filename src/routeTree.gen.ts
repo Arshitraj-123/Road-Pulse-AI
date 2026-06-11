@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyRouteImport } from './routes/verify'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as NavigateRouteImport } from './routes/navigate'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContractorRouteImport } from './routes/contractor'
 import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as MunicipalRouteImport } from './routes/_municipal'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginIndexRouteImport } from './routes/login.index'
+import { Route as SignupContractorRouteImport } from './routes/signup.contractor'
+import { Route as SignupCitizenRouteImport } from './routes/signup.citizen'
+import { Route as LoginMunicipalRouteImport } from './routes/login.municipal'
 import { Route as MunicipalReportsRouteImport } from './routes/_municipal.reports'
 import { Route as MunicipalDetectionRouteImport } from './routes/_municipal.detection'
 import { Route as MunicipalDashboardRouteImport } from './routes/_municipal.dashboard'
@@ -22,6 +28,16 @@ import { Route as MunicipalContractorsRouteImport } from './routes/_municipal.co
 import { Route as MunicipalBudgetRouteImport } from './routes/_municipal.budget'
 import { Route as MunicipalAlertsRouteImport } from './routes/_municipal.alerts'
 
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NavigateRoute = NavigateRouteImport.update({
   id: '/navigate',
   path: '/navigate',
@@ -50,6 +66,26 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LoginRoute,
+} as any)
+const SignupContractorRoute = SignupContractorRouteImport.update({
+  id: '/contractor',
+  path: '/contractor',
+  getParentRoute: () => SignupRoute,
+} as any)
+const SignupCitizenRoute = SignupCitizenRouteImport.update({
+  id: '/citizen',
+  path: '/citizen',
+  getParentRoute: () => SignupRoute,
+} as any)
+const LoginMunicipalRoute = LoginMunicipalRouteImport.update({
+  id: '/municipal',
+  path: '/municipal',
+  getParentRoute: () => LoginRoute,
 } as any)
 const MunicipalReportsRoute = MunicipalReportsRouteImport.update({
   id: '/reports',
@@ -86,27 +122,38 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
-  '/login': typeof LoginRoute
+  '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
+  '/signup': typeof SignupRouteWithChildren
+  '/verify': typeof VerifyRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
   '/reports': typeof MunicipalReportsRoute
+  '/login/municipal': typeof LoginMunicipalRoute
+  '/signup/citizen': typeof SignupCitizenRoute
+  '/signup/contractor': typeof SignupContractorRoute
+  '/login/': typeof LoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
-  '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
+  '/signup': typeof SignupRouteWithChildren
+  '/verify': typeof VerifyRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
   '/reports': typeof MunicipalReportsRoute
+  '/login/municipal': typeof LoginMunicipalRoute
+  '/signup/citizen': typeof SignupCitizenRoute
+  '/signup/contractor': typeof SignupContractorRoute
+  '/login': typeof LoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,14 +161,20 @@ export interface FileRoutesById {
   '/_municipal': typeof MunicipalRouteWithChildren
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
-  '/login': typeof LoginRoute
+  '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
+  '/signup': typeof SignupRouteWithChildren
+  '/verify': typeof VerifyRoute
   '/_municipal/alerts': typeof MunicipalAlertsRoute
   '/_municipal/budget': typeof MunicipalBudgetRoute
   '/_municipal/contractors': typeof MunicipalContractorsRoute
   '/_municipal/dashboard': typeof MunicipalDashboardRoute
   '/_municipal/detection': typeof MunicipalDetectionRoute
   '/_municipal/reports': typeof MunicipalReportsRoute
+  '/login/municipal': typeof LoginMunicipalRoute
+  '/signup/citizen': typeof SignupCitizenRoute
+  '/signup/contractor': typeof SignupContractorRoute
+  '/login/': typeof LoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,25 +184,36 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/signup'
+    | '/verify'
     | '/alerts'
     | '/budget'
     | '/contractors'
     | '/dashboard'
     | '/detection'
     | '/reports'
+    | '/login/municipal'
+    | '/signup/citizen'
+    | '/signup/contractor'
+    | '/login/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/citizen'
     | '/contractor'
-    | '/login'
     | '/navigate'
+    | '/signup'
+    | '/verify'
     | '/alerts'
     | '/budget'
     | '/contractors'
     | '/dashboard'
     | '/detection'
     | '/reports'
+    | '/login/municipal'
+    | '/signup/citizen'
+    | '/signup/contractor'
+    | '/login'
   id:
     | '__root__'
     | '/'
@@ -158,12 +222,18 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/signup'
+    | '/verify'
     | '/_municipal/alerts'
     | '/_municipal/budget'
     | '/_municipal/contractors'
     | '/_municipal/dashboard'
     | '/_municipal/detection'
     | '/_municipal/reports'
+    | '/login/municipal'
+    | '/signup/citizen'
+    | '/signup/contractor'
+    | '/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,12 +241,28 @@ export interface RootRouteChildren {
   MunicipalRoute: typeof MunicipalRouteWithChildren
   CitizenRoute: typeof CitizenRoute
   ContractorRoute: typeof ContractorRoute
-  LoginRoute: typeof LoginRoute
+  LoginRoute: typeof LoginRouteWithChildren
   NavigateRoute: typeof NavigateRoute
+  SignupRoute: typeof SignupRouteWithChildren
+  VerifyRoute: typeof VerifyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/navigate': {
       id: '/navigate'
       path: '/navigate'
@@ -218,6 +304,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof LoginRoute
+    }
+    '/signup/contractor': {
+      id: '/signup/contractor'
+      path: '/contractor'
+      fullPath: '/signup/contractor'
+      preLoaderRoute: typeof SignupContractorRouteImport
+      parentRoute: typeof SignupRoute
+    }
+    '/signup/citizen': {
+      id: '/signup/citizen'
+      path: '/citizen'
+      fullPath: '/signup/citizen'
+      preLoaderRoute: typeof SignupCitizenRouteImport
+      parentRoute: typeof SignupRoute
+    }
+    '/login/municipal': {
+      id: '/login/municipal'
+      path: '/municipal'
+      fullPath: '/login/municipal'
+      preLoaderRoute: typeof LoginMunicipalRouteImport
+      parentRoute: typeof LoginRoute
     }
     '/_municipal/reports': {
       id: '/_municipal/reports'
@@ -286,13 +400,40 @@ const MunicipalRouteWithChildren = MunicipalRoute._addFileChildren(
   MunicipalRouteChildren,
 )
 
+interface LoginRouteChildren {
+  LoginMunicipalRoute: typeof LoginMunicipalRoute
+  LoginIndexRoute: typeof LoginIndexRoute
+}
+
+const LoginRouteChildren: LoginRouteChildren = {
+  LoginMunicipalRoute: LoginMunicipalRoute,
+  LoginIndexRoute: LoginIndexRoute,
+}
+
+const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
+
+interface SignupRouteChildren {
+  SignupCitizenRoute: typeof SignupCitizenRoute
+  SignupContractorRoute: typeof SignupContractorRoute
+}
+
+const SignupRouteChildren: SignupRouteChildren = {
+  SignupCitizenRoute: SignupCitizenRoute,
+  SignupContractorRoute: SignupContractorRoute,
+}
+
+const SignupRouteWithChildren =
+  SignupRoute._addFileChildren(SignupRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MunicipalRoute: MunicipalRouteWithChildren,
   CitizenRoute: CitizenRoute,
   ContractorRoute: ContractorRoute,
-  LoginRoute: LoginRoute,
+  LoginRoute: LoginRouteWithChildren,
   NavigateRoute: NavigateRoute,
+  SignupRoute: SignupRouteWithChildren,
+  VerifyRoute: VerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
