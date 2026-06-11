@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home" },
@@ -13,6 +13,7 @@ const links = [
 export function PublicNavbar({ variant = "dark" }: { variant?: "dark" | "light" }) {
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(false);
+  const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
@@ -28,6 +29,10 @@ export function PublicNavbar({ variant = "dark" }: { variant?: "dark" | "light" 
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   const toggleTheme = () => {
     const next = !dark;
@@ -53,16 +58,16 @@ export function PublicNavbar({ variant = "dark" }: { variant?: "dark" | "light" 
       transition={{ duration: 0.4 }}
       className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md ${base} ${border}`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-md bg-teal-mid">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:px-6">
+        <Link to="/" className="flex min-w-0 items-center gap-2">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-teal-mid">
             <svg viewBox="0 0 24 24" fill="none" className="size-5">
               <path d="M4 20L12 4L20 20H4Z" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
               <path d="M12 9V14" stroke="white" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
-          <span className="font-display text-lg font-bold tracking-tight">RoadPulse</span>
-          <span className="rounded bg-teal-mid/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-teal-mid">
+          <span className="truncate font-display text-lg font-bold tracking-tight">RoadPulse</span>
+          <span className="shrink-0 rounded bg-teal-mid/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-teal-mid">
             AI
           </span>
         </Link>
@@ -104,12 +109,64 @@ export function PublicNavbar({ variant = "dark" }: { variant?: "dark" | "light" 
           </button>
           <Link
             to="/login"
-            className="rounded-md border border-teal-mid px-3.5 py-1.5 text-sm font-medium text-teal-mid hover:bg-teal-mid hover:text-white transition-colors"
+            className="hidden rounded-md border border-teal-mid px-3.5 py-1.5 text-sm font-medium text-teal-mid hover:bg-teal-mid hover:text-white transition-colors sm:inline-flex"
           >
             Login →
           </Link>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            className={`rounded-md p-2 transition-colors md:hidden ${
+              isDark ? "hover:bg-white/10" : "hover:bg-black/5"
+            }`}
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
         </div>
       </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className={`md:hidden ${isDark ? "bg-[rgba(4,44,83,0.96)] border-t border-white/10" : "bg-white border-t border-border"}`}
+          >
+            <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
+              {links.map((l) => {
+                const active = pathname === l.to;
+                return (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    className={`rounded-md px-3 py-2.5 text-sm font-medium ${
+                      active
+                        ? isDark
+                          ? "bg-teal-mid/15 text-teal-mid"
+                          : "bg-teal-light text-teal-dark"
+                        : isDark
+                          ? "text-white/85 hover:bg-white/5"
+                          : "text-navy hover:bg-muted"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                );
+              })}
+              <Link
+                to="/login"
+                className="mt-1 inline-flex items-center justify-center rounded-md border border-teal-mid px-3.5 py-2 text-sm font-semibold text-teal-mid sm:hidden"
+              >
+                Login →
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }
