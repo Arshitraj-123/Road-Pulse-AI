@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { User, Building2, HardHat, ArrowRight } from "lucide-react";
-import { useAuthStore, type Role } from "@/store/useAuthStore";
+import { type Role } from "@/store/useAuthStore";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 
 export const Route = createFileRoute("/login/")({
@@ -19,7 +19,7 @@ const roles: {
   icon: React.ElementType;
   title: string;
   desc: string;
-  to: "/dashboard" | "/contractor" | "/citizen";
+  to: "/signup/citizen" | "/login/municipal" | "/signup/contractor";
   accent: string;
 }[] = [
   {
@@ -27,7 +27,7 @@ const roles: {
     icon: User,
     title: "Citizen",
     desc: "Report potholes, earn points, track repairs.",
-    to: "/citizen",
+    to: "/signup/citizen",
     accent: "from-teal-light to-teal-mid/10",
   },
   {
@@ -35,7 +35,7 @@ const roles: {
     icon: Building2,
     title: "Municipal Officer",
     desc: "Full dashboard, AI detection, contractor management.",
-    to: "/dashboard",
+    to: "/login/municipal",
     accent: "from-navy-light to-navy-mid/10",
   },
   {
@@ -43,17 +43,14 @@ const roles: {
     icon: HardHat,
     title: "Contractor",
     desc: "View assigned tickets, update repair status.",
-    to: "/contractor",
+    to: "/signup/contractor",
     accent: "from-amber-light to-amber/10",
   },
 ];
 
 function LoginPage() {
-  const { login } = useAuthStore();
   const navigate = useNavigate();
-
   const choose = (r: typeof roles[number]) => {
-    login(r.key);
     navigate({ to: r.to });
   };
 
