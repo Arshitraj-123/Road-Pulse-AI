@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as NavigateRouteImport } from './routes/navigate'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContractorRouteImport } from './routes/contractor'
@@ -23,6 +24,11 @@ import { Route as MunicipalContractorsRouteImport } from './routes/_municipal.co
 import { Route as MunicipalBudgetRouteImport } from './routes/_municipal.budget'
 import { Route as MunicipalAlertsRouteImport } from './routes/_municipal.alerts'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NavigateRoute = NavigateRouteImport.update({
   id: '/navigate',
   path: '/navigate',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/contractor': typeof ContractorRoute
   '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
+  '/signup': typeof SignupRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
   '/navigate': typeof NavigateRoute
+  '/signup': typeof SignupRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/contractor': typeof ContractorRoute
   '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
+  '/signup': typeof SignupRoute
   '/_municipal/alerts': typeof MunicipalAlertsRoute
   '/_municipal/budget': typeof MunicipalBudgetRoute
   '/_municipal/contractors': typeof MunicipalContractorsRoute
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/signup'
     | '/alerts'
     | '/budget'
     | '/contractors'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/citizen'
     | '/contractor'
     | '/navigate'
+    | '/signup'
     | '/alerts'
     | '/budget'
     | '/contractors'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/login'
     | '/navigate'
+    | '/signup'
     | '/_municipal/alerts'
     | '/_municipal/budget'
     | '/_municipal/contractors'
@@ -183,10 +195,18 @@ export interface RootRouteChildren {
   ContractorRoute: typeof ContractorRoute
   LoginRoute: typeof LoginRouteWithChildren
   NavigateRoute: typeof NavigateRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/navigate': {
       id: '/navigate'
       path: '/navigate'
@@ -320,6 +340,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContractorRoute: ContractorRoute,
   LoginRoute: LoginRouteWithChildren,
   NavigateRoute: NavigateRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
