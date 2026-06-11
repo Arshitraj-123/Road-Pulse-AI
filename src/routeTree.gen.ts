@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as NavigateRouteImport } from './routes/navigate'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContractorRouteImport } from './routes/contractor'
 import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as MunicipalRouteImport } from './routes/_municipal'
@@ -25,6 +26,11 @@ import { Route as MunicipalAlertsRouteImport } from './routes/_municipal.alerts'
 const NavigateRoute = NavigateRouteImport.update({
   id: '/navigate',
   path: '/navigate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContractorRoute = ContractorRouteImport.update({
@@ -47,9 +53,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => LoginRoute,
 } as any)
 const MunicipalReportsRoute = MunicipalReportsRouteImport.update({
   id: '/reports',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
+  '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
@@ -114,6 +121,7 @@ export interface FileRoutesById {
   '/_municipal': typeof MunicipalRouteWithChildren
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
+  '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
   '/_municipal/alerts': typeof MunicipalAlertsRoute
   '/_municipal/budget': typeof MunicipalBudgetRoute
@@ -129,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/citizen'
     | '/contractor'
+    | '/login'
     | '/navigate'
     | '/alerts'
     | '/budget'
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/_municipal'
     | '/citizen'
     | '/contractor'
+    | '/login'
     | '/navigate'
     | '/_municipal/alerts'
     | '/_municipal/budget'
@@ -171,8 +181,8 @@ export interface RootRouteChildren {
   MunicipalRoute: typeof MunicipalRouteWithChildren
   CitizenRoute: typeof CitizenRoute
   ContractorRoute: typeof ContractorRoute
+  LoginRoute: typeof LoginRouteWithChildren
   NavigateRoute: typeof NavigateRoute
-  LoginIndexRoute: typeof LoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -182,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/navigate'
       fullPath: '/navigate'
       preLoaderRoute: typeof NavigateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contractor': {
@@ -214,10 +231,10 @@ declare module '@tanstack/react-router' {
     }
     '/login/': {
       id: '/login/'
-      path: '/login'
+      path: '/'
       fullPath: '/login/'
       preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LoginRoute
     }
     '/_municipal/reports': {
       id: '/_municipal/reports'
@@ -286,13 +303,23 @@ const MunicipalRouteWithChildren = MunicipalRoute._addFileChildren(
   MunicipalRouteChildren,
 )
 
+interface LoginRouteChildren {
+  LoginIndexRoute: typeof LoginIndexRoute
+}
+
+const LoginRouteChildren: LoginRouteChildren = {
+  LoginIndexRoute: LoginIndexRoute,
+}
+
+const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MunicipalRoute: MunicipalRouteWithChildren,
   CitizenRoute: CitizenRoute,
   ContractorRoute: ContractorRoute,
+  LoginRoute: LoginRouteWithChildren,
   NavigateRoute: NavigateRoute,
-  LoginIndexRoute: LoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
