@@ -4,7 +4,7 @@ import { User, Building2, HardHat, ArrowRight } from "lucide-react";
 import { useAuthStore, type Role } from "@/store/useAuthStore";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/login/")({
   head: () => ({
     meta: [
       { title: "Sign in — RoadPulse AI" },

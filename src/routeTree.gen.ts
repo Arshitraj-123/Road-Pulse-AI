@@ -10,11 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as NavigateRouteImport } from './routes/navigate'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContractorRouteImport } from './routes/contractor'
 import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as MunicipalRouteImport } from './routes/_municipal'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginIndexRouteImport } from './routes/login.index'
 import { Route as MunicipalReportsRouteImport } from './routes/_municipal.reports'
 import { Route as MunicipalDetectionRouteImport } from './routes/_municipal.detection'
 import { Route as MunicipalDashboardRouteImport } from './routes/_municipal.dashboard'
@@ -25,11 +25,6 @@ import { Route as MunicipalAlertsRouteImport } from './routes/_municipal.alerts'
 const NavigateRoute = NavigateRouteImport.update({
   id: '/navigate',
   path: '/navigate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContractorRoute = ContractorRouteImport.update({
@@ -49,6 +44,11 @@ const MunicipalRoute = MunicipalRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MunicipalReportsRoute = MunicipalReportsRouteImport.update({
@@ -86,7 +86,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
-  '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
@@ -94,12 +93,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
   '/reports': typeof MunicipalReportsRoute
+  '/login/': typeof LoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
-  '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
@@ -107,6 +106,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
   '/reports': typeof MunicipalReportsRoute
+  '/login': typeof LoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,7 +114,6 @@ export interface FileRoutesById {
   '/_municipal': typeof MunicipalRouteWithChildren
   '/citizen': typeof CitizenRoute
   '/contractor': typeof ContractorRoute
-  '/login': typeof LoginRoute
   '/navigate': typeof NavigateRoute
   '/_municipal/alerts': typeof MunicipalAlertsRoute
   '/_municipal/budget': typeof MunicipalBudgetRoute
@@ -122,6 +121,7 @@ export interface FileRoutesById {
   '/_municipal/dashboard': typeof MunicipalDashboardRoute
   '/_municipal/detection': typeof MunicipalDetectionRoute
   '/_municipal/reports': typeof MunicipalReportsRoute
+  '/login/': typeof LoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,7 +129,6 @@ export interface FileRouteTypes {
     | '/'
     | '/citizen'
     | '/contractor'
-    | '/login'
     | '/navigate'
     | '/alerts'
     | '/budget'
@@ -137,12 +136,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/detection'
     | '/reports'
+    | '/login/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/citizen'
     | '/contractor'
-    | '/login'
     | '/navigate'
     | '/alerts'
     | '/budget'
@@ -150,13 +149,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/detection'
     | '/reports'
+    | '/login'
   id:
     | '__root__'
     | '/'
     | '/_municipal'
     | '/citizen'
     | '/contractor'
-    | '/login'
     | '/navigate'
     | '/_municipal/alerts'
     | '/_municipal/budget'
@@ -164,6 +163,7 @@ export interface FileRouteTypes {
     | '/_municipal/dashboard'
     | '/_municipal/detection'
     | '/_municipal/reports'
+    | '/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,8 +171,8 @@ export interface RootRouteChildren {
   MunicipalRoute: typeof MunicipalRouteWithChildren
   CitizenRoute: typeof CitizenRoute
   ContractorRoute: typeof ContractorRoute
-  LoginRoute: typeof LoginRoute
   NavigateRoute: typeof NavigateRoute
+  LoginIndexRoute: typeof LoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -182,13 +182,6 @@ declare module '@tanstack/react-router' {
       path: '/navigate'
       fullPath: '/navigate'
       preLoaderRoute: typeof NavigateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contractor': {
@@ -217,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_municipal/reports': {
@@ -291,8 +291,8 @@ const rootRouteChildren: RootRouteChildren = {
   MunicipalRoute: MunicipalRouteWithChildren,
   CitizenRoute: CitizenRoute,
   ContractorRoute: ContractorRoute,
-  LoginRoute: LoginRoute,
   NavigateRoute: NavigateRoute,
+  LoginIndexRoute: LoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
