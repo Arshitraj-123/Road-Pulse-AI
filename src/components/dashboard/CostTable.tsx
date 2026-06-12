@@ -58,12 +58,12 @@ export function CostTable() {
           <Download className="size-3.5" /> Export CSV
         </Button>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
         <table className="w-full text-sm">
           <thead className="sticky top-0 bg-muted/50 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-5 py-2.5 text-left font-medium">Road Segment</th>
-              <th className="px-3 py-2.5 text-left font-medium">Damage</th>
+              <th className="px-3 py-2.5 text-left font-medium hidden md:table-cell">Damage</th>
               <th className="px-3 py-2.5 text-left font-medium">Severity</th>
               <th
                 className="cursor-pointer px-3 py-2.5 text-right font-medium hover:text-teal"
@@ -77,7 +77,7 @@ export function CostTable() {
               >
                 <span className="inline-flex items-center gap-1">Priority <ArrowDownUp className="size-3" /></span>
               </th>
-              <th className="px-5 py-2.5 text-right font-medium">Action</th>
+              <th className="px-5 py-2.5 text-right font-medium hidden lg:table-cell">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -89,21 +89,21 @@ export function CostTable() {
               return (
                 <tr key={r.id} className="border-t hover:bg-teal-light/30">
                   <td className="px-5 py-2.5">
-                    <p className="font-medium">{r.location}</p>
+                    <p className="font-medium whitespace-nowrap">{r.location}</p>
                     <p className="font-mono text-[10px] text-muted-foreground">{r.id}</p>
                   </td>
-                  <td className="px-3 py-2.5 text-muted-foreground">{r.type}</td>
+                  <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap hidden md:table-cell">{r.type}</td>
                   <td className="px-3 py-2.5"><Badge variant={sevVariant}>{r.severity}</Badge></td>
-                  <td className="px-3 py-2.5 text-right font-mono">₹{r.costEstimate.toLocaleString("en-IN")}</td>
+                  <td className="px-3 py-2.5 text-right font-mono whitespace-nowrap">₹{r.costEstimate.toLocaleString("en-IN")}</td>
                   <td className="px-3 py-2.5">
                     <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
+                      <div className="h-1.5 w-16 md:w-24 overflow-hidden rounded-full bg-muted dark:bg-[#111D30]">
                         <div className="h-full rounded-full" style={{ width: `${pct}%`, background: color }} />
                       </div>
                       <span className="font-mono text-[10px] text-muted-foreground">{Math.round(pct)}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-2.5 text-right">
+                  <td className="px-5 py-2.5 text-right hidden lg:table-cell">
                     <Button variant="ghost" size="sm">View →</Button>
                   </td>
                 </tr>
@@ -111,6 +111,9 @@ export function CostTable() {
             })}
           </tbody>
         </table>
+      </div>
+      <div className="px-4 py-2 text-center text-[11px] text-muted-foreground md:hidden border-t border-border">
+        Swipe to see more →
       </div>
     </div>
   );

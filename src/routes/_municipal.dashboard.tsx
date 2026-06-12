@@ -5,6 +5,7 @@ import { Bell, Download, FileText, CheckCircle2, Clock, IndianRupee } from "luci
 import { StatCard } from "@/components/rp/StatCard";
 import { Button } from "@/components/rp/Button";
 import { Card } from "@/components/rp/Card";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { DamageMap } from "@/components/dashboard/DamageMap";
 import { DonutChart } from "@/components/dashboard/DonutChart";
 import { PredictiveBar } from "@/components/dashboard/PredictiveBar";
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/_municipal/dashboard")({
 
 function Dashboard() {
   const { push } = useNotificationStore();
-  const { name } = useAuthStore();
+  const { user, roleData } = useAuthStore();
 
   useEffect(() => {
     const t1 = setTimeout(
@@ -54,28 +55,31 @@ function Dashboard() {
   });
 
   return (
-    <div className="px-5 py-6 sm:px-8">
+    <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 md:px-8">
       {/* Top bar */}
-      <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+      <div className="-mx-4 -mt-6 mb-2 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-white p-4 dark:border-white/8 dark:bg-[#0F1E35] sm:mx-0 sm:mt-0 sm:rounded-xl sm:border sm:px-6">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight">
-            Good morning, {(name ?? "Arjun").split(" ")[0]} 👋
+          <h1 className="font-display text-xl font-bold tracking-tight md:text-2xl">
+            Good morning, {user?.fullName?.split(" ")[0] || "Officer"} 👋
           </h1>
-          <p className="text-sm text-muted-foreground">{today} · Patna Municipal Corporation</p>
+          <p className="text-xs text-muted-foreground md:text-sm">
+            {today} · {roleData?.municipalityName || "Patna Municipal Corporation"}
+          </p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="relative rounded-md border bg-card p-2 hover:bg-muted">
+          <ThemeToggle />
+          <button className="relative rounded-md border border-border bg-card p-2 hover:bg-muted dark:border-white/10">
             <Bell className="size-4" />
             <span className="absolute right-1 top-1 size-1.5 rounded-full bg-danger" />
           </button>
-          <Button variant="primary" size="md">
+          <Button variant="primary" size="md" className="hidden sm:inline-flex">
             <Download className="size-4" /> Export Report
           </Button>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
         <StatCard label="Active Reports" value={1247} icon={FileText} accent="danger" trend={12} trendDirection="up" />
         <StatCard label="Resolved This Week" value={342} icon={CheckCircle2} accent="teal" trend={8} trendDirection="down" />
         <StatCard label="Avg. Resolution Time" value={4.2} decimals={1} suffix=" d" icon={Clock} accent="amber" trend={5} trendDirection="down" />
@@ -162,7 +166,7 @@ function Dashboard() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4 }}
-        className="mt-4 mb-10"
+        className="mb-6"
       >
         <CostTable />
       </motion.div>

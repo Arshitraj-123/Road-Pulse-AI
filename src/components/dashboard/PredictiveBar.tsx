@@ -27,17 +27,22 @@ const data = [
 const barColor = (d: number) =>
   d <= 7 ? "#A32D2D" : d <= 14 ? "#BA7517" : "#1D9E75";
 
+import useThemeStore from "@/store/useThemeStore";
+
 export function PredictiveBar() {
+  const { theme } = useThemeStore();
+  const isDark = theme === "dark";
+
   return (
-    <div className="h-[340px] w-full">
+    <div className="h-[220px] w-full md:h-[340px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 8, right: 20, left: 10, bottom: 8 }}>
-          <XAxis type="number" tick={{ fontSize: 11, fill: "#5b6a78" }} domain={[0, 30]} />
+          <XAxis type="number" tick={{ fontSize: 11, fill: isDark ? "#94a3b8" : "#64748b" }} domain={[0, 30]} />
           <YAxis
             type="category"
             dataKey="name"
             width={140}
-            tick={{ fontSize: 10, fill: "#5b6a78" }}
+            tick={{ fontSize: 10, fill: isDark ? "#94a3b8" : "#64748b" }}
           />
           <ReferenceLine
             x={0}
@@ -46,14 +51,15 @@ export function PredictiveBar() {
             label={{ value: "TODAY", position: "top", fill: "#0F6E56", fontSize: 10 }}
           />
           <Tooltip
-            cursor={{ fill: "rgba(29,158,117,0.08)" }}
+            cursor={{ fill: isDark ? "rgba(255,255,255,0.05)" : "rgba(29,158,117,0.08)" }}
             contentStyle={{
-              background: "#042c53",
-              border: "none",
+              background: isDark ? "#0F1E35" : "#ffffff",
+              border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e2e8f0",
               borderRadius: 8,
-              color: "white",
               fontSize: 12,
             }}
+            itemStyle={{ color: isDark ? "#e2e8f0" : "#475569" }}
+            labelStyle={{ color: isDark ? "#ffffff" : "#042c53", fontWeight: 600, marginBottom: 4 }}
             formatter={((value: unknown, _name: unknown, item: unknown) => {
               const it = item as { payload: (typeof data)[number] };
               const d = it.payload;

@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WallOfShameRouteImport } from './routes/wall-of-shame'
 import { Route as VerifyRouteImport } from './routes/verify'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as NavigateRouteImport } from './routes/navigate'
 import { Route as LoginRouteImport } from './routes/login'
@@ -21,6 +23,9 @@ import { Route as LoginIndexRouteImport } from './routes/login.index'
 import { Route as SignupContractorRouteImport } from './routes/signup.contractor'
 import { Route as SignupCitizenRouteImport } from './routes/signup.citizen'
 import { Route as LoginMunicipalRouteImport } from './routes/login.municipal'
+import { Route as ContractorRejectedRouteImport } from './routes/contractor_.rejected'
+import { Route as ContractorPendingRouteImport } from './routes/contractor_.pending'
+import { Route as ContractorBlacklistedRouteImport } from './routes/contractor_.blacklisted'
 import { Route as MunicipalReportsRouteImport } from './routes/_municipal.reports'
 import { Route as MunicipalDetectionRouteImport } from './routes/_municipal.detection'
 import { Route as MunicipalDashboardRouteImport } from './routes/_municipal.dashboard'
@@ -28,9 +33,19 @@ import { Route as MunicipalContractorsRouteImport } from './routes/_municipal.co
 import { Route as MunicipalBudgetRouteImport } from './routes/_municipal.budget'
 import { Route as MunicipalAlertsRouteImport } from './routes/_municipal.alerts'
 
+const WallOfShameRoute = WallOfShameRouteImport.update({
+  id: '/wall-of-shame',
+  path: '/wall-of-shame',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
   path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -87,6 +102,21 @@ const LoginMunicipalRoute = LoginMunicipalRouteImport.update({
   path: '/municipal',
   getParentRoute: () => LoginRoute,
 } as any)
+const ContractorRejectedRoute = ContractorRejectedRouteImport.update({
+  id: '/contractor_/rejected',
+  path: '/contractor/rejected',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractorPendingRoute = ContractorPendingRouteImport.update({
+  id: '/contractor_/pending',
+  path: '/contractor/pending',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractorBlacklistedRoute = ContractorBlacklistedRouteImport.update({
+  id: '/contractor_/blacklisted',
+  path: '/contractor/blacklisted',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MunicipalReportsRoute = MunicipalReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -125,13 +155,18 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
   '/signup': typeof SignupRouteWithChildren
+  '/unauthorized': typeof UnauthorizedRoute
   '/verify': typeof VerifyRoute
+  '/wall-of-shame': typeof WallOfShameRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
   '/reports': typeof MunicipalReportsRoute
+  '/contractor/blacklisted': typeof ContractorBlacklistedRoute
+  '/contractor/pending': typeof ContractorPendingRoute
+  '/contractor/rejected': typeof ContractorRejectedRoute
   '/login/municipal': typeof LoginMunicipalRoute
   '/signup/citizen': typeof SignupCitizenRoute
   '/signup/contractor': typeof SignupContractorRoute
@@ -143,13 +178,18 @@ export interface FileRoutesByTo {
   '/contractor': typeof ContractorRoute
   '/navigate': typeof NavigateRoute
   '/signup': typeof SignupRouteWithChildren
+  '/unauthorized': typeof UnauthorizedRoute
   '/verify': typeof VerifyRoute
+  '/wall-of-shame': typeof WallOfShameRoute
   '/alerts': typeof MunicipalAlertsRoute
   '/budget': typeof MunicipalBudgetRoute
   '/contractors': typeof MunicipalContractorsRoute
   '/dashboard': typeof MunicipalDashboardRoute
   '/detection': typeof MunicipalDetectionRoute
   '/reports': typeof MunicipalReportsRoute
+  '/contractor/blacklisted': typeof ContractorBlacklistedRoute
+  '/contractor/pending': typeof ContractorPendingRoute
+  '/contractor/rejected': typeof ContractorRejectedRoute
   '/login/municipal': typeof LoginMunicipalRoute
   '/signup/citizen': typeof SignupCitizenRoute
   '/signup/contractor': typeof SignupContractorRoute
@@ -164,13 +204,18 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteWithChildren
   '/navigate': typeof NavigateRoute
   '/signup': typeof SignupRouteWithChildren
+  '/unauthorized': typeof UnauthorizedRoute
   '/verify': typeof VerifyRoute
+  '/wall-of-shame': typeof WallOfShameRoute
   '/_municipal/alerts': typeof MunicipalAlertsRoute
   '/_municipal/budget': typeof MunicipalBudgetRoute
   '/_municipal/contractors': typeof MunicipalContractorsRoute
   '/_municipal/dashboard': typeof MunicipalDashboardRoute
   '/_municipal/detection': typeof MunicipalDetectionRoute
   '/_municipal/reports': typeof MunicipalReportsRoute
+  '/contractor_/blacklisted': typeof ContractorBlacklistedRoute
+  '/contractor_/pending': typeof ContractorPendingRoute
+  '/contractor_/rejected': typeof ContractorRejectedRoute
   '/login/municipal': typeof LoginMunicipalRoute
   '/signup/citizen': typeof SignupCitizenRoute
   '/signup/contractor': typeof SignupContractorRoute
@@ -185,13 +230,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/navigate'
     | '/signup'
+    | '/unauthorized'
     | '/verify'
+    | '/wall-of-shame'
     | '/alerts'
     | '/budget'
     | '/contractors'
     | '/dashboard'
     | '/detection'
     | '/reports'
+    | '/contractor/blacklisted'
+    | '/contractor/pending'
+    | '/contractor/rejected'
     | '/login/municipal'
     | '/signup/citizen'
     | '/signup/contractor'
@@ -203,13 +253,18 @@ export interface FileRouteTypes {
     | '/contractor'
     | '/navigate'
     | '/signup'
+    | '/unauthorized'
     | '/verify'
+    | '/wall-of-shame'
     | '/alerts'
     | '/budget'
     | '/contractors'
     | '/dashboard'
     | '/detection'
     | '/reports'
+    | '/contractor/blacklisted'
+    | '/contractor/pending'
+    | '/contractor/rejected'
     | '/login/municipal'
     | '/signup/citizen'
     | '/signup/contractor'
@@ -223,13 +278,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/navigate'
     | '/signup'
+    | '/unauthorized'
     | '/verify'
+    | '/wall-of-shame'
     | '/_municipal/alerts'
     | '/_municipal/budget'
     | '/_municipal/contractors'
     | '/_municipal/dashboard'
     | '/_municipal/detection'
     | '/_municipal/reports'
+    | '/contractor_/blacklisted'
+    | '/contractor_/pending'
+    | '/contractor_/rejected'
     | '/login/municipal'
     | '/signup/citizen'
     | '/signup/contractor'
@@ -244,16 +304,35 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRouteWithChildren
   NavigateRoute: typeof NavigateRoute
   SignupRoute: typeof SignupRouteWithChildren
+  UnauthorizedRoute: typeof UnauthorizedRoute
   VerifyRoute: typeof VerifyRoute
+  WallOfShameRoute: typeof WallOfShameRoute
+  ContractorBlacklistedRoute: typeof ContractorBlacklistedRoute
+  ContractorPendingRoute: typeof ContractorPendingRoute
+  ContractorRejectedRoute: typeof ContractorRejectedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wall-of-shame': {
+      id: '/wall-of-shame'
+      path: '/wall-of-shame'
+      fullPath: '/wall-of-shame'
+      preLoaderRoute: typeof WallOfShameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify': {
       id: '/verify'
       path: '/verify'
       fullPath: '/verify'
       preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -332,6 +411,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/login/municipal'
       preLoaderRoute: typeof LoginMunicipalRouteImport
       parentRoute: typeof LoginRoute
+    }
+    '/contractor_/rejected': {
+      id: '/contractor_/rejected'
+      path: '/contractor/rejected'
+      fullPath: '/contractor/rejected'
+      preLoaderRoute: typeof ContractorRejectedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contractor_/pending': {
+      id: '/contractor_/pending'
+      path: '/contractor/pending'
+      fullPath: '/contractor/pending'
+      preLoaderRoute: typeof ContractorPendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contractor_/blacklisted': {
+      id: '/contractor_/blacklisted'
+      path: '/contractor/blacklisted'
+      fullPath: '/contractor/blacklisted'
+      preLoaderRoute: typeof ContractorBlacklistedRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_municipal/reports': {
       id: '/_municipal/reports'
@@ -433,7 +533,12 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRouteWithChildren,
   NavigateRoute: NavigateRoute,
   SignupRoute: SignupRouteWithChildren,
+  UnauthorizedRoute: UnauthorizedRoute,
   VerifyRoute: VerifyRoute,
+  WallOfShameRoute: WallOfShameRoute,
+  ContractorBlacklistedRoute: ContractorBlacklistedRoute,
+  ContractorPendingRoute: ContractorPendingRoute,
+  ContractorRejectedRoute: ContractorRejectedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

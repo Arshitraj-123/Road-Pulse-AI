@@ -22,9 +22,37 @@ export const Route = createFileRoute("/contractor")({
   ssr: false,
   beforeLoad: () => {
     if (typeof window === "undefined") return;
-    const { role } = useAuthStore.getState();
+    const { isAuthenticated, role, isLoading, roleData } = useAuthStore.getState();
+
+    // If session is still restoring, don't redirect yet
+    if (isLoading) return;
+
+    // Not logged in → send to login with context
+    if (!isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: { from: "/contractor" },
+      });
+    }
+
+    // Logged in but wrong role → send to unauthorized
     if (role !== "contractor") {
-      throw redirect({ to: "/login" });
+      throw redirect({
+        to: "/unauthorized",
+        search: { required: "contractor", from: "/contractor" },
+      });
+    }
+
+    // Check contractor approval status
+    const approvalStatus = roleData?.approvalStatus;
+    if (approvalStatus === "pending") {
+      throw redirect({ to: "/contractor/pending" as string });
+    }
+    if (approvalStatus === "rejected") {
+      throw redirect({ to: "/contractor/rejected" as string });
+    }
+    if (approvalStatus === "blacklisted") {
+      throw redirect({ to: "/contractor/blacklisted" as string });
     }
   },
   head: () => ({
@@ -59,7 +87,7 @@ const statusMeta: Record<TicketStatus, { label: string; cls: string; icon: React
 const MY_CONTRACTOR_ID = "C-002"; // BharatPave Ltd. — assigned in mock data
 
 function ContractorPortal() {
-  const { name, logout } = useAuthStore();
+  const { user, roleData, logout } = useAuthStore();
   const navigate = useNavigate();
   const push = useNotificationStore((s) => s.push);
 
@@ -88,7 +116,7 @@ function ContractorPortal() {
 
   useEffect(() => {
     // Welcome ping
-    push({ type: "info", message: `Welcome back, ${name ?? "Contractor"} — ${workTickets.filter(t => t.status !== "resolved").length} active tickets.` });
+    push({ type: "info", message: `Welcome back, ${user?.fullName?.split(" ")[0] || "Contractor"} — ${workTickets.filter(t => t.status !== "resolved").length} active tickets.` });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -114,9 +142,9 @@ function ContractorPortal() {
   const filtered = workTickets.filter((t) => filter === "all" || t.status === filter);
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface transition-colors dark:bg-[#0A1628]">
       {/* Topbar */}
-      <header className="sticky top-0 z-30 border-b bg-navy text-white">
+      <header className="sticky top-0 z-30 border-b border-border bg-card text-foreground transition-colors dark:border-white/10 dark:bg-[#0A1628]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3">
           <div className="flex items-center gap-3">
             <div className="flex size-9 items-center justify-center rounded-md bg-amber">
@@ -124,8 +152,8 @@ function ContractorPortal() {
             </div>
             <div>
               <p className="font-display text-base font-bold leading-none">RoadPulse</p>
-              <p className="text-[10px] uppercase tracking-wider text-white/50">
-                Contractor Portal · {name}
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                Contractor Portal · {roleData?.companyName || user?.fullName}
               </p>
             </div>
           </div>
@@ -134,7 +162,7 @@ function ContractorPortal() {
               logout();
               navigate({ to: "/login" });
             }}
-            className="flex items-center gap-1.5 rounded-md border border-white/15 px-3 py-1.5 text-xs text-white/80 hover:bg-white/5"
+            className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted dark:border-white/15 dark:text-white/80 dark:hover:bg-white/5"
           >
             <LogOut className="size-3.5" /> Sign out
           </button>
@@ -149,10 +177,10 @@ function ContractorPortal() {
           className="mb-6 flex flex-wrap items-end justify-between gap-3"
         >
           <div>
-            <h1 className="font-display text-3xl font-bold text-navy">Work Queue</h1>
+            <h1 className="font-display text-3xl font-bold text-foreground">Work Queue</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Assigned repair tickets from Patna Municipal Corp · contractor ID{" "}
-              <span className="font-mono text-navy">{MY_CONTRACTOR_ID}</span>
+              <span className="font-mono text-foreground">{MY_CONTRACTOR_ID}</span>
             </p>
           </div>
           <div className="flex items-center gap-1.5 rounded-full bg-teal-light px-3 py-1 text-xs font-medium text-teal-dark">
@@ -164,7 +192,7 @@ function ContractorPortal() {
         {/* Stat strip */}
         <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { label: "Open", value: stats.open, icon: Clock, cls: "text-navy" },
+            { label: "Open", value: stats.open, icon: Clock, cls: "text-foreground" },
             { label: "Overdue", value: stats.overdue, icon: AlertTriangle, cls: "text-danger" },
             { label: "Resolved (mo.)", value: stats.resolved, icon: CheckCircle2, cls: "text-teal-dark" },
             { label: "Earned (₹)", value: stats.revenue.toLocaleString("en-IN"), icon: IndianRupee, cls: "text-amber" },
@@ -198,8 +226,8 @@ function ContractorPortal() {
               onClick={() => setFilter(f)}
               className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 filter === f
-                  ? "bg-navy text-white"
-                  : "border bg-card text-muted-foreground hover:border-navy-mid/40 hover:text-navy"
+                  ? "bg-foreground text-background"
+                  : "border bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground"
               }`}
             >
               {f === "all" ? "All tickets" : statusMeta[f].label}
@@ -219,7 +247,7 @@ function ContractorPortal() {
                 <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-full bg-teal-light">
                   <CheckCircle2 className="size-7 text-teal-dark" />
                 </div>
-                <p className="font-display text-lg font-semibold text-navy">All clear</p>
+                <p className="font-display text-lg font-semibold text-foreground">All clear</p>
                 <p className="mt-1 text-sm text-muted-foreground">
                   No tickets match this filter. Great work.
                 </p>
@@ -259,7 +287,7 @@ function ContractorPortal() {
                             </span>
                           )}
                         </div>
-                        <p className="mt-1.5 font-display text-base font-semibold text-navy">
+                        <p className="mt-1.5 font-display text-base font-semibold text-foreground">
                           {t.type}
                         </p>
                         <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
@@ -267,7 +295,7 @@ function ContractorPortal() {
                         </p>
                       </div>
                       <div className="shrink-0 text-right">
-                        <p className="font-display text-base font-bold text-navy">
+                        <p className="font-display text-base font-bold text-foreground">
                           ₹{t.costEstimate.toLocaleString("en-IN")}
                         </p>
                         <p className="font-mono text-[10px] text-muted-foreground">
@@ -298,7 +326,7 @@ function ContractorPortal() {
                     {statusMeta[selected.status].label}
                   </span>
                 </div>
-                <h2 className="mt-2 font-display text-xl font-bold text-navy">{selected.type}</h2>
+                <h2 className="mt-2 font-display text-xl font-bold text-foreground">{selected.type}</h2>
                 <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                   <MapPin className="size-3.5" /> {selected.location}
                 </p>
@@ -306,7 +334,7 @@ function ContractorPortal() {
                 <div className="mt-4 grid grid-cols-3 gap-2 rounded-lg bg-surface p-3">
                   <div>
                     <p className="font-mono text-[10px] uppercase text-muted-foreground">Cost</p>
-                    <p className="font-display text-sm font-bold text-navy">
+                    <p className="font-display text-sm font-bold text-foreground">
                       ₹{selected.costEstimate.toLocaleString("en-IN")}
                     </p>
                   </div>
@@ -316,7 +344,7 @@ function ContractorPortal() {
                   </div>
                   <div>
                     <p className="font-mono text-[10px] uppercase text-muted-foreground">Age</p>
-                    <p className="font-display text-sm font-bold text-navy">{selected.minsAgo}m</p>
+                    <p className="font-display text-sm font-bold text-foreground">{selected.minsAgo}m</p>
                   </div>
                 </div>
 
@@ -349,7 +377,7 @@ function ContractorPortal() {
             ) : (
               <div className="rounded-xl border border-dashed bg-card p-8 text-center">
                 <TrendingUp className="mx-auto size-8 text-teal-mid" />
-                <p className="mt-3 font-display text-sm font-semibold text-navy">
+                <p className="mt-3 font-display text-sm font-semibold text-foreground">
                   Select a ticket
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">

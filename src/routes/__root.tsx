@@ -7,11 +7,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ToastHost } from "@/components/rp/ToastHost";
+import useThemeStore from "@/store/useThemeStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 function NotFoundComponent() {
   return (
@@ -41,9 +42,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -134,8 +132,46 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SplashScreen() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-surface transition-colors dark:bg-[#0A1628]">
+      <div className="text-center">
+        {/* Logo */}
+        <div className="mx-auto flex size-14 items-center justify-center rounded-xl bg-teal-mid shadow-lg shadow-teal-mid/20">
+          <svg viewBox="0 0 24 24" fill="none" className="size-8">
+            <path d="M4 20L12 4L20 20H4Z" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <p className="mt-4 font-display text-xl font-bold text-foreground">RoadPulse AI</p>
+        {/* Shimmer bar */}
+        <div className="mx-auto mt-6 h-1 w-32 overflow-hidden rounded-full bg-muted">
+          <div className="h-full w-1/2 rounded-full bg-gradient-to-r from-teal-mid to-teal-light skeleton-shimmer" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const initTheme = useThemeStore(s => s.initTheme);
+  const restoreSession = useAuthStore(s => s.restoreSession);
+  const isLoading = useAuthStore(s => s.isLoading);
+  
+  useEffect(() => {
+    initTheme();
+    restoreSession();
+  }, [initTheme, restoreSession]);
+
+  // Show splash while restoring session to prevent login flash
+  if (isLoading) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <SplashScreen />
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />

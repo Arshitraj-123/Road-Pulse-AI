@@ -82,7 +82,7 @@ function DetectionPage() {
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-wider text-teal-mid">Inference Lab</p>
-          <h1 className="mt-1 font-display text-3xl font-bold text-navy sm:text-4xl">AI Damage Detection</h1>
+          <h1 className="mt-1 font-display text-3xl font-bold text-foreground sm:text-4xl">AI Damage Detection</h1>
           <p className="mt-1 text-sm text-muted-foreground">YOLOv8-RP · 10 damage classes · avg 0.82s per frame</p>
         </div>
         <div className="flex gap-2">
@@ -112,7 +112,7 @@ function DetectionPage() {
           <Card className="p-5">
             <div className="mb-3 flex items-center gap-2">
               <Cpu className="size-4 text-teal-mid" />
-              <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-navy">Pipeline</h2>
+              <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground">Pipeline</h2>
             </div>
             <ol className="space-y-2">
               {PIPELINE.map((p, i) => {
@@ -127,7 +127,7 @@ function DetectionPage() {
                     >
                       {done ? "✓" : i + 1}
                     </span>
-                    <span className={done ? "text-navy" : active ? "text-amber" : "text-muted-foreground"}>{p}</span>
+                    <span className={done ? "text-foreground" : active ? "text-amber" : "text-muted-foreground"}>{p}</span>
                   </li>
                 );
               })}
@@ -136,7 +136,7 @@ function DetectionPage() {
 
           <Card className="p-5">
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-navy">Detections</h2>
+              <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground">Detections</h2>
               <Badge variant="info">{detections.length}</Badge>
             </div>
             <AnimatePresence mode="popLayout">
@@ -155,7 +155,7 @@ function DetectionPage() {
                       className="flex items-center justify-between rounded-lg border bg-card px-3 py-2.5"
                     >
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-navy">{d.label}</p>
+                        <p className="truncate text-sm font-semibold text-foreground">{d.label}</p>
                         <p className="font-mono text-[11px] text-muted-foreground">
                           conf {d.confidence.toFixed(1)}% · {d.severity}
                         </p>
@@ -175,7 +175,7 @@ function DetectionPage() {
           {detections.length > 0 && (
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
               <Card className="p-5">
-                <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-navy">
+                <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-foreground">
                   Action Brief
                 </h2>
                 <div className="grid grid-cols-3 gap-3 text-center">
@@ -199,8 +199,8 @@ function DetectionPage() {
                     <p className="font-mono text-[10px] uppercase text-amber/80">To failure</p>
                   </div>
                 </div>
-                <p className="mt-4 flex items-start gap-2 rounded-lg bg-navy-light p-3 text-xs text-navy">
-                  <Sparkles className="mt-0.5 size-4 shrink-0 text-navy-mid" />
+                <p className="mt-4 flex items-start gap-2 rounded-lg bg-muted p-3 text-xs text-foreground dark:bg-[#111D30]">
+                  <Sparkles className="mt-0.5 size-4 shrink-0 text-teal-mid" />
                   <span>
                     Recommend immediate dispatch to <strong>Alpha Builders</strong> (98% SLA) — within failure window.
                   </span>

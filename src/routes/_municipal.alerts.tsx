@@ -23,7 +23,7 @@ interface Alert {
 const meta: Record<AlertKind, { icon: React.ElementType; cls: string; ring: string }> = {
   critical: { icon: AlertTriangle, cls: "bg-danger-light text-danger", ring: "border-danger/40" },
   warning: { icon: Zap, cls: "bg-amber-light text-amber", ring: "border-amber/40" },
-  info: { icon: Info, cls: "bg-navy-light text-navy", ring: "border-navy-mid/40" },
+  info: { icon: Info, cls: "bg-muted text-foreground", ring: "border-border" },
   success: { icon: CheckCircle2, cls: "bg-teal-light text-teal-dark", ring: "border-teal-mid/40" },
 };
 
@@ -87,7 +87,7 @@ function AlertsPage() {
         className="mb-6 flex flex-wrap items-end justify-between gap-3"
       >
         <div>
-          <h1 className="flex items-center gap-2 font-display text-3xl font-bold text-navy">
+          <h1 className="flex items-center gap-2 font-display text-3xl font-bold text-foreground">
             Alerts
             {unread > 0 && (
               <span className="rounded-full bg-danger px-2 py-0.5 font-mono text-xs font-bold text-white">
@@ -123,8 +123,8 @@ function AlertsPage() {
               onClick={() => setFilter(f)}
               className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 filter === f
-                  ? "bg-navy text-white"
-                  : "border bg-card text-muted-foreground hover:border-navy-mid/40 hover:text-navy"
+                  ? "bg-foreground text-background"
+                  : "border bg-card text-muted-foreground hover:border-border hover:text-foreground"
               }`}
             >
               {f[0].toUpperCase() + f.slice(1)}
@@ -157,7 +157,7 @@ function AlertsPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className={`font-display text-sm ${!a.read ? "font-bold text-navy" : "font-medium text-foreground"}`}>
+                    <p className={`font-display text-sm ${!a.read ? "font-bold text-foreground" : "font-medium text-foreground"}`}>
                       {a.title}
                     </p>
                     {!a.read && <span className="size-1.5 rounded-full bg-teal-mid" />}
@@ -171,7 +171,7 @@ function AlertsPage() {
                 <div className="flex flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                   <button
                     onClick={() => toggleRead(a.id)}
-                    className="rounded p-1 text-muted-foreground hover:bg-surface hover:text-navy"
+                    className="rounded p-1 text-muted-foreground hover:bg-surface hover:text-foreground"
                     title={a.read ? "Mark unread" : "Mark read"}
                   >
                     <Bell className="size-3.5" />
@@ -194,7 +194,7 @@ function AlertsPage() {
             <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-full bg-teal-light">
               <CheckCircle2 className="size-7 text-teal-dark" />
             </div>
-            <p className="font-display text-lg font-semibold text-navy">Inbox zero</p>
+            <p className="font-display text-lg font-semibold text-foreground">Inbox zero</p>
             <p className="mt-1 text-sm text-muted-foreground">No alerts match this filter.</p>
           </div>
         )}

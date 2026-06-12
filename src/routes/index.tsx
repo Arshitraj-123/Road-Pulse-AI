@@ -91,8 +91,8 @@ function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a1628] text-white">
-      <PublicNavbar variant="dark" />
+    <div className="min-h-screen bg-surface dark:bg-[#0A1628] text-foreground transition-colors">
+      <PublicNavbar />
 
       {/* HERO */}
       <section className="relative min-h-screen overflow-hidden">
@@ -145,10 +145,10 @@ function Home() {
               className={`absolute -inset-3 rounded-full ${p.type === "critical" ? "bg-danger" : "bg-amber"} opacity-30 blur-md`}
               style={{ animation: "pingHero 2s cubic-bezier(0,0,0.2,1) infinite" }}
             />
-            <span className={`relative block size-3 rounded-full ring-2 ring-white/40 ${p.type === "critical" ? "bg-danger" : "bg-amber"}`} />
-            <div className="pointer-events-none absolute left-1/2 top-5 z-30 hidden w-48 -translate-x-1/2 rounded-md border border-white/10 bg-[#042c53]/95 p-2 text-[11px] shadow-xl group-hover:block">
-              <p className="font-medium text-white">{p.label}</p>
-              <p className="font-mono text-amber-light">₹{p.cost.toLocaleString("en-IN")} • Fails in {p.days} days</p>
+            <span className={`relative block size-3 rounded-full ring-2 ring-white/40 dark:ring-white/20 ${p.type === "critical" ? "bg-danger" : "bg-amber"}`} />
+            <div className="pointer-events-none absolute left-1/2 top-5 z-30 hidden w-48 -translate-x-1/2 rounded-md border border-border bg-white p-2 text-[11px] shadow-xl group-hover:block dark:border-white/10 dark:bg-[#042c53]/95">
+              <p className="font-medium text-navy dark:text-white">{p.label}</p>
+              <p className="font-mono text-amber-dark dark:text-amber-light">₹{p.cost.toLocaleString("en-IN")} • Fails in {p.days} days</p>
             </div>
           </motion.div>
         ))}
@@ -192,7 +192,7 @@ function Home() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
-            className="mt-5 max-w-2xl text-lg text-[#9FE1CB] sm:text-xl"
+            className="mt-5 max-w-2xl text-lg text-muted-foreground dark:text-[#9FE1CB] sm:text-xl"
           >
             Detect damage. Predict failure. Route safely. Hold contractors accountable.
           </motion.p>
@@ -201,17 +201,19 @@ function Home() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-3"
+            className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
           >
             <Link
               to="/dashboard"
-              className="btn-shimmer inline-flex items-center gap-2 rounded-md bg-teal-mid px-6 py-3 font-display text-sm font-semibold text-white shadow-[0_8px_30px_rgba(29,158,117,0.4)] hover:bg-teal"
+              className="btn-shimmer inline-flex w-full justify-center items-center gap-2 rounded-md bg-teal-mid px-6 py-3 font-display text-sm font-semibold text-white shadow-[0_8px_30px_rgba(29,158,117,0.4)] hover:bg-teal sm:w-auto"
             >
               See Live Dashboard <ArrowRight className="size-4" />
             </Link>
             <a
-              href="#"
-              className="inline-flex items-center gap-2 rounded-md border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/5"
+              href="https://wa.me/919876543210?text=Hi%20RoadPulse!%20I%20want%20to%20report%20a%20pothole."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full justify-center items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted dark:border-white/30 dark:bg-transparent dark:hover:bg-white/5 sm:w-auto"
             >
               <MessageCircle className="size-4 text-[#25D366]" /> Report on WhatsApp
             </a>
@@ -220,7 +222,7 @@ function Home() {
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.8 }}
-            className="absolute bottom-24 left-1/2 -translate-x-1/2 text-white/40"
+            className="absolute bottom-24 left-1/2 -translate-x-1/2 text-muted-foreground dark:text-white/40"
           >
             <ChevronDown className="size-6" />
           </motion.div>
@@ -239,7 +241,7 @@ function Home() {
       </div>
 
       {/* FEATURES */}
-      <section className="bg-[#0a1628] px-6 py-24">
+      <section className="bg-surface px-6 py-24 transition-colors dark:bg-[#0a1628]">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -247,10 +249,10 @@ function Home() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-3xl text-center"
         >
-          <h2 className="font-display text-4xl font-bold sm:text-5xl">
+          <h2 className="font-display text-4xl font-bold text-foreground sm:text-5xl">
             One platform. <span className="text-teal-mid">Every signal.</span>
           </h2>
-          <p className="mt-4 text-lg text-white/60">
+          <p className="mt-4 text-lg text-muted-foreground dark:text-white/60">
             From the citizen on the street to the engineer in the operations room.
           </p>
         </motion.div>
@@ -266,11 +268,11 @@ function Home() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 whileHover={{ y: -4, boxShadow: "0 16px 40px rgba(29,158,117,0.18)" }}
-                className="rounded-xl border border-white/10 border-l-[4px] border-l-teal-mid bg-white/[0.03] p-6 backdrop-blur"
+                className="rounded-xl border border-border border-l-[4px] border-l-teal-mid bg-card p-6 shadow-sm transition-colors dark:border-white/10 dark:border-l-teal-mid dark:bg-white/[0.03] dark:backdrop-blur"
               >
                 <Icon className="size-7 text-teal-mid" />
-                <h3 className="mt-4 font-display text-lg font-semibold">{f.title}</h3>
-                <p className="mt-1 text-sm text-white/60">{f.desc}</p>
+                <h3 className="mt-4 font-display text-lg font-semibold text-foreground">{f.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground dark:text-white/60">{f.desc}</p>
               </motion.div>
             );
           })}
@@ -278,7 +280,7 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 bg-[#0a1628] px-6 py-10 text-center text-xs text-white/40">
+      <footer className="border-t border-border bg-surface px-6 py-10 text-center text-xs text-muted-foreground transition-colors dark:border-white/5 dark:bg-[#0a1628] dark:text-white/40">
         <p>© 2026 RoadPulse AI · Built for safer Indian roads.</p>
       </footer>
     </div>

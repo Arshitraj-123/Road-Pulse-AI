@@ -50,7 +50,7 @@ export function TicketFeed() {
   );
 
   return (
-    <div className="flex h-[380px] flex-col">
+    <div className="flex h-[300px] md:h-[380px] flex-col">
       <div className="mb-3 flex gap-1">
         {(["all", "critical", "overdue", "today"] as const).map((k) => (
           <button

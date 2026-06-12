@@ -66,12 +66,12 @@ function NavigatePage() {
   const upcomingHazards = useMemo(() => hazards.filter((h) => h.severity !== "minor").slice(0, 3), []);
 
   return (
-    <div className="min-h-screen bg-surface">
-      <PublicNavbar variant="light" />
+    <div className="min-h-screen bg-surface transition-colors dark:bg-[#0A1628]">
+      <PublicNavbar />
       <main className="mx-auto max-w-7xl px-4 pb-12 pt-24 sm:px-6">
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <p className="font-mono text-[11px] uppercase tracking-wider text-teal-mid">Smart Navigate</p>
-          <h1 className="mt-1 font-display text-3xl font-bold text-navy sm:text-4xl">
+          <h1 className="mt-1 font-display text-3xl font-bold text-foreground sm:text-4xl">
             Route around potholes, not into them.
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -82,13 +82,13 @@ function NavigatePage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.5fr_1fr]">
           {/* Map */}
           <Card className="overflow-hidden p-0" hover={false}>
-            <div className="flex items-center justify-between border-b bg-card px-4 py-2.5">
+            <div className="flex items-center justify-between border-b border-border bg-card px-4 py-2.5 transition-colors dark:border-white/10 dark:bg-white/[0.03]">
               <div className="flex items-center gap-2 text-xs">
-                <span className="flex items-center gap-1.5 font-mono text-navy">
+                <span className="flex items-center gap-1.5 font-mono text-foreground">
                   <span className="size-2 rounded-full bg-teal-mid" /> From: Gandhi Maidan
                 </span>
                 <ArrowRight className="size-3.5 text-muted-foreground" />
-                <span className="flex items-center gap-1.5 font-mono text-navy">
+                <span className="flex items-center gap-1.5 font-mono text-foreground">
                   <span className="size-2 rounded-full bg-danger" /> To: Patna Junction
                 </span>
               </div>
@@ -224,7 +224,7 @@ function NavigatePage() {
           <div className="space-y-4">
             {/* Route selector */}
             <Card className="p-5" hover={false}>
-              <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-navy">
+              <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-foreground">
                 Choose route
               </h2>
               <div className="space-y-2">
@@ -250,8 +250,8 @@ function NavigatePage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between">
-                          <p className="font-display text-sm font-bold text-navy">{r.label}</p>
-                          <p className="font-mono text-sm font-bold text-navy">{r.time}m</p>
+                          <p className="font-display text-sm font-bold text-foreground">{r.label}</p>
+                          <p className="font-mono text-sm font-bold text-foreground">{r.time}m</p>
                         </div>
                         <div className="mt-0.5 flex items-center justify-between font-mono text-[10px] text-muted-foreground">
                           <span>{r.distance} km</span>
@@ -288,17 +288,17 @@ function NavigatePage() {
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div>
                       <Clock className="mx-auto size-4 text-teal-mid" />
-                      <p className="mt-1 font-display text-xl font-bold text-navy">{route.time}m</p>
+                      <p className="mt-1 font-display text-xl font-bold text-foreground">{route.time}m</p>
                       <p className="font-mono text-[10px] uppercase text-muted-foreground">ETA</p>
                     </div>
                     <div>
-                      <MapPin className="mx-auto size-4 text-navy-mid" />
-                      <p className="mt-1 font-display text-xl font-bold text-navy">{route.distance}<span className="text-xs">km</span></p>
+                      <MapPin className="mx-auto size-4 text-teal-mid" />
+                      <p className="mt-1 font-display text-xl font-bold text-foreground">{route.distance}<span className="text-xs">km</span></p>
                       <p className="font-mono text-[10px] uppercase text-muted-foreground">Distance</p>
                     </div>
                     <div>
                       <AlertTriangle className="mx-auto size-4 text-amber" />
-                      <p className="mt-1 font-display text-xl font-bold text-navy">{route.hazards}</p>
+                      <p className="mt-1 font-display text-xl font-bold text-foreground">{route.hazards}</p>
                       <p className="font-mono text-[10px] uppercase text-muted-foreground">Hazards</p>
                     </div>
                   </div>
@@ -309,7 +309,7 @@ function NavigatePage() {
             {/* Upcoming alerts */}
             <Card className="p-5" hover={false}>
               <div className="mb-3 flex items-center justify-between">
-                <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-navy">
+                <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-foreground">
                   Upcoming alerts
                 </h2>
                 <Badge variant="live">Live</Badge>
@@ -328,7 +328,7 @@ function NavigatePage() {
                       style={{ background: sevColor[h.severity] }}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-navy">{h.type}</p>
+                      <p className="truncate text-sm font-semibold text-foreground">{h.type}</p>
                       <p className="truncate font-mono text-[10px] text-muted-foreground">{h.location}</p>
                     </div>
                     <span className="font-mono text-[10px] text-muted-foreground">{(i + 1) * 320}m</span>
@@ -339,9 +339,9 @@ function NavigatePage() {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="mt-3 flex items-center gap-2 rounded-md bg-navy-light p-2.5 text-xs italic text-navy"
+                  className="mt-3 flex items-center gap-2 rounded-md bg-muted/50 p-2.5 text-xs italic text-foreground transition-colors dark:bg-white/5"
                 >
-                  <Volume2 className="size-3.5 shrink-0 text-navy-mid" />
+                  <Volume2 className="size-3.5 shrink-0 text-muted-foreground" />
                   "Critical pothole ahead in 320 meters. Slow down."
                 </motion.p>
               )}

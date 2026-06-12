@@ -20,9 +20,13 @@ export const Route = createFileRoute("/_municipal/budget")({
   component: BudgetPage,
 });
 
+import useThemeStore from "@/store/useThemeStore";
+
 const TOTAL_BUDGET = 28_500_000; // ₹2.85 Cr FY allocation
 
 function BudgetPage() {
+  const { theme } = useThemeStore();
+  const isDark = theme === "dark";
   const stats = useMemo(() => {
     const committed = reports.reduce((a, r) => a + r.costEstimate, 0);
     const spent = reports.filter((r) => r.status === "resolved").reduce((a, r) => a + r.costEstimate, 0);
@@ -51,7 +55,7 @@ function BudgetPage() {
   return (
     <div className="p-6 lg:p-8">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-        <h1 className="font-display text-3xl font-bold text-navy">Budget & Spend</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground">Budget & Spend</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           FY 2025–26 road maintenance allocation · ₹{(TOTAL_BUDGET / 10000000).toFixed(2)} Cr total
         </p>
@@ -60,7 +64,7 @@ function BudgetPage() {
       {/* KPI tiles */}
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {[
-          { label: "Total Budget", value: fmt(TOTAL_BUDGET), icon: IndianRupee, tone: "text-navy", bg: "bg-navy-light" },
+          { label: "Total Budget", value: fmt(TOTAL_BUDGET), icon: IndianRupee, tone: "text-foreground", bg: "bg-muted" },
           { label: "Committed", value: fmt(stats.committed), sub: `${pct(stats.committed)}%`, icon: TrendingUp, tone: "text-amber", bg: "bg-amber-light" },
           { label: "Spent", value: fmt(stats.spent), sub: `${pct(stats.spent)}%`, icon: TrendingDown, tone: "text-teal-dark", bg: "bg-teal-light" },
           { label: "Remaining", value: fmt(stats.remaining), sub: `${pct(stats.remaining)}%`, icon: AlertCircle, tone: "text-danger", bg: "bg-danger-light" },
@@ -93,7 +97,7 @@ function BudgetPage() {
           <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
             FY Utilization
           </p>
-          <span className="font-display text-sm font-bold text-navy">
+          <span className="font-display text-sm font-bold text-foreground">
             {pct(stats.committed)}% committed · {pct(stats.spent)}% spent
           </span>
         </div>
@@ -121,7 +125,7 @@ function BudgetPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Monthly chart */}
         <div className="rounded-xl border bg-card p-5">
-          <h3 className="font-display text-lg font-semibold text-navy">Planned vs Actual</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground">Planned vs Actual</h3>
           <p className="text-xs text-muted-foreground">Monthly spend in ₹ Lakh</p>
           <div className="mt-4 h-64">
             <ResponsiveContainer>
@@ -132,12 +136,18 @@ function BudgetPage() {
                     <stop offset="100%" stopColor="#1d9e75" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="#94a3b8" />
-                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${v / 100000}L`} stroke="#94a3b8" />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#1e293b" : "#e5e7eb"} vertical={false} />
+                <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke={isDark ? "#94a3b8" : "#64748b"} />
+                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${v / 100000}L`} stroke={isDark ? "#94a3b8" : "#64748b"} />
                 <Tooltip
                   formatter={(v: unknown) => `₹${(Number(v) / 100000).toFixed(1)}L`}
-                  contentStyle={{ borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{
+                    background: isDark ? "#0F1E35" : "#ffffff",
+                    border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e2e8f0",
+                    borderRadius: 8,
+                    color: isDark ? "#ffffff" : "#042c53",
+                    fontSize: 12,
+                  }}
                 />
                 <Area type="monotone" dataKey="planned" stroke="#185fa5" strokeDasharray="4 4" fill="none" />
                 <Area type="monotone" dataKey="actual" stroke="#1d9e75" strokeWidth={2} fill="url(#actual)" />
@@ -148,17 +158,23 @@ function BudgetPage() {
 
         {/* By damage type */}
         <div className="rounded-xl border bg-card p-5">
-          <h3 className="font-display text-lg font-semibold text-navy">Spend by Damage Type</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground">Spend by Damage Type</h3>
           <p className="text-xs text-muted-foreground">Committed budget per category</p>
           <div className="mt-4 h-64">
             <ResponsiveContainer>
               <BarChart data={byType} layout="vertical" margin={{ top: 8, right: 16, left: 16, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
-                <XAxis type="number" tickFormatter={(v) => `${v / 1000}k`} tick={{ fontSize: 11 }} stroke="#94a3b8" />
-                <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={120} stroke="#94a3b8" />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#1e293b" : "#e5e7eb"} horizontal={false} />
+                <XAxis type="number" tickFormatter={(v) => `${v / 1000}k`} tick={{ fontSize: 11 }} stroke={isDark ? "#94a3b8" : "#64748b"} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={120} stroke={isDark ? "#94a3b8" : "#64748b"} />
                 <Tooltip
                   formatter={(v: unknown) => `₹${Number(v).toLocaleString("en-IN")}`}
-                  contentStyle={{ borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{
+                    background: isDark ? "#0F1E35" : "#ffffff",
+                    border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e2e8f0",
+                    borderRadius: 8,
+                    color: isDark ? "#ffffff" : "#042c53",
+                    fontSize: 12,
+                  }}
                 />
                 <Bar dataKey="value" fill="#185fa5" radius={[0, 6, 6, 0]} />
               </BarChart>

@@ -18,7 +18,7 @@ const sevCls: Record<string, string> = {
   minor: "bg-teal-light text-teal-dark border-teal-mid/30",
 };
 const statusCls: Record<string, string> = {
-  open: "bg-navy-light text-navy",
+  open: "bg-muted text-foreground",
   in_progress: "bg-amber-light text-amber",
   resolved: "bg-teal-light text-teal-dark",
 };
@@ -65,14 +65,14 @@ function ReportsPage() {
         className="mb-6 flex flex-wrap items-end justify-between gap-3"
       >
         <div>
-          <h1 className="font-display text-3xl font-bold text-navy">Damage Reports</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">Damage Reports</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             All AI-detected and citizen-reported road damage across Patna · {filtered.length} of {reports.length}
           </p>
         </div>
         <button
           onClick={exportCsv}
-          className="flex items-center gap-1.5 rounded-md bg-navy px-3.5 py-2 text-xs font-medium text-white hover:bg-navy/90"
+          className="flex items-center gap-1.5 rounded-md bg-teal-mid px-3.5 py-2 text-xs font-medium text-white hover:bg-teal-dark"
         >
           <Download className="size-3.5" /> Export CSV
         </button>
@@ -87,7 +87,7 @@ function ReportsPage() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by ID, type, location…"
-              className="w-full rounded-md border bg-surface py-2 pl-9 pr-3 text-sm outline-none focus:border-teal-mid"
+              className="w-full rounded-md border border-border bg-surface py-2 pl-9 pr-3 text-sm text-foreground outline-none transition-colors focus:border-teal-mid dark:border-white/15 dark:bg-[#0A1628] dark:text-white"
             />
           </div>
           <Select
@@ -114,7 +114,7 @@ function ReportsPage() {
           />
           <button
             onClick={() => setSortDesc((s) => !s)}
-            className="flex items-center gap-1.5 rounded-md border bg-surface px-3 py-2 text-xs hover:border-teal-mid"
+            className="flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-2 text-xs text-foreground transition-colors hover:border-teal-mid dark:border-white/15 dark:bg-[#0A1628] dark:text-white"
           >
             <ArrowUpDown className="size-3.5" /> Confidence {sortDesc ? "↓" : "↑"}
           </button>
@@ -123,9 +123,9 @@ function ReportsPage() {
 
       {/* Table */}
       <div className="overflow-hidden rounded-xl border bg-card">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
           <table className="w-full text-sm">
-            <thead className="bg-surface text-left font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+            <thead className="bg-surface text-left font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors dark:bg-white/5 dark:text-white/60">
               <tr>
                 <th className="px-4 py-3">ID</th>
                 <th className="px-4 py-3">Damage</th>
@@ -147,8 +147,8 @@ function ReportsPage() {
                   className="border-t hover:bg-surface/60"
                 >
                   <td className="px-4 py-2.5 font-mono text-[11px] text-muted-foreground">{r.id}</td>
-                  <td className="px-4 py-2.5 font-medium text-navy">{r.type}</td>
-                  <td className="px-4 py-2.5">
+                  <td className="px-4 py-2.5 font-medium text-foreground whitespace-nowrap">{r.type}</td>
+                  <td className="px-4 py-2.5 whitespace-nowrap">
                     <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                       <MapPin className="size-3" /> {r.location}
                     </span>
@@ -159,7 +159,7 @@ function ReportsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-2.5 text-right font-mono text-xs">{r.confidence.toFixed(1)}%</td>
-                  <td className="px-4 py-2.5 text-right font-mono text-xs text-navy">
+                  <td className="px-4 py-2.5 text-right font-mono text-xs text-foreground whitespace-nowrap">
                     ₹{r.costEstimate.toLocaleString("en-IN")}
                   </td>
                   <td className="px-4 py-2.5 text-right">
@@ -183,6 +183,9 @@ function ReportsPage() {
             </div>
           )}
         </div>
+        <div className="px-4 py-2 text-center text-[11px] text-muted-foreground md:hidden border-t border-border">
+          Swipe to see more →
+        </div>
       </div>
     </div>
   );
@@ -205,10 +208,10 @@ function Select({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none rounded-md border bg-surface py-2 pl-3 pr-8 text-xs outline-none focus:border-teal-mid"
+        className="appearance-none rounded-md border border-border bg-surface py-2 pl-3 pr-8 text-xs text-foreground outline-none transition-colors focus:border-teal-mid dark:border-white/15 dark:bg-[#0A1628] dark:text-white"
       >
         {options.map((o) => (
-          <option key={o.v} value={o.v}>
+          <option key={o.v} value={o.v} className="dark:bg-[#0A1628]">
             {o.l}
           </option>
         ))}
