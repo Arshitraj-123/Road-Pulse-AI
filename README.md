@@ -20,6 +20,53 @@ Road Pulse AI is an intelligent, role-based platform designed to bridge the gap 
 - **Work Queue (Coming Soon)**: Approved contractors can view their assigned tasks, manage their repair queues, and update ticket statuses.
 - **Performance Tracking**: Contractors are graded on their SLA compliance and overall resolution rate.
 
+## 🔄 Contractor Approval Workflow
+
+The following diagram illustrates the complete Role-Based Access Control (RBAC) flow from a contractor requesting access to a municipal officer approving it.
+
+```mermaid
+flowchart TD
+    %% Define Styles
+    classDef contractor fill:#0f5132,color:#fff,stroke:none,rx:8px,ry:8px,padding:10px
+    classDef municipal fill:#084298,color:#fff,stroke:none,rx:8px,ry:8px
+    classDef waiting fill:#664d03,color:#fff,stroke:none,rx:8px,ry:8px
+    classDef rejection fill:#842029,color:#fff,stroke:none,rx:8px,ry:8px
+    classDef decision fill:#41464b,color:#fff,stroke:none,rx:8px,ry:8px
+    
+    subgraph Contractor Action
+        A1["Fill access request form<br><small>Company, license, municipality</small>"]:::contractor
+        A2["Submit request<br><small>POST /api/auth/contractor/request</small>"]:::contractor
+        A3["Sees pending screen<br><small>/contractor/pending</small>"]:::waiting
+        
+        A4["Approval email received<br><small>Sets password via link</small>"]:::contractor
+        A5["Logs in for first time<br><small>/login/contractor</small>"]:::contractor
+        A6["Enters work queue<br><small>/contractor/queue</small>"]:::contractor
+    end
+    
+    subgraph Municipal Action
+        M1["New request notification<br><small>Red badge on dashboard</small>"]:::municipal
+        M2["Reviews contractor request<br><small>Dashboard → Contractors tab</small>"]:::municipal
+        M3["Approve or Reject?<br><small>PATCH /api/municipal/contractors/:id</small>"]:::decision
+        M4["Rejection email sent<br><small>Reason included</small>"]:::rejection
+        M5["Assigns tickets to contractor<br><small>Contractor ID saved to reports</small>"]:::municipal
+    end
+
+    A1 --> A2
+    A2 --> A3
+    A2 -- "request sent to<br>their municipality" --> M1
+    
+    M1 --> M2
+    M2 --> M3
+    
+    M3 -- "Reject" --> M4
+    M3 -- "Approve" --> A4
+    
+    A4 --> A5
+    A5 --> A6
+    
+    M5 -- "tickets appear<br>in queue" --> A6
+```
+
 ## 🛠 Tech Stack
 
 **Frontend**
